@@ -3,11 +3,7 @@
 //!
 //! Input is exposed via resources: `ButtonInput<KeyCode>` and `ButtonInput<KeyModifiers>`.
 
-use bevy::{
-    prelude::*,
-    app::AppExit,
-    input::ButtonInput
-};
+use bevy::{input::ButtonInput, prelude::*};
 use crossbeam_channel::{bounded, Receiver};
 use crossterm::event::{self, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use std::thread;
@@ -35,7 +31,7 @@ impl Plugin for StdinPlugin {
         app.insert_resource(ButtonInput::<KeyModifiers>::default());
         app.add_systems(Startup, setup);
         app.add_systems(PreUpdate, read_stream);
-        app.add_systems(Update, ctrl_c);
+        // app.add_systems(Update, ctrl_c);
     }
 }
 
@@ -53,7 +49,8 @@ fn setup(mut commands: Commands) {
             if event::poll(timeout).expect("Failed to poll stdin") {
                 let e = event::read().expect("Failed to read stdin event");
                 if let event::Event::Key(key) = e {
-                    tx.send(StdinEvent(key)).expect("Failed to transmit key event");
+                    tx.send(StdinEvent(key))
+                        .expect("Failed to transmit key event");
                 }
             }
         }
@@ -84,13 +81,14 @@ fn read_stream(
     }
 }
 
-/// Monitor for Ctrl+C and shut down bevy
-fn ctrl_c(
-    key: Res<ButtonInput<KeyCode>>,
-    modifier: Res<ButtonInput<KeyModifiers>>,
-    mut ev_exit: EventWriter<AppExit>,
-) {
-    if modifier.just_pressed(KeyModifiers::CONTROL) && key.just_pressed(KeyCode::Char('c')) {
-        ev_exit.write(AppExit::Success);
-    }
-}
+// Monitor for Ctrl+C and shut down bevy
+// fn ctrl_c(
+//     key: Res<ButtonInput<KeyCode>>,
+//     modifier: Res<ButtonInput<KeyModifiers>>,
+//     mut ev_exit: EventWriter<AppExit>,
+// ) {
+//     if modifier.just_pressed(KeyModifiers::CONTROL) && key.just_pressed(KeyCode::Char('c')) {
+//         ev_exit.write(AppExit::Success);
+//     }
+// }
+// Or rather let's not
