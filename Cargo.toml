@@ -1,6 +1,6 @@
 [package]
 name = "bevy_stdin"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2024"
 description = "Receive input from stdin"
 license = "MIT OR Apache-2.0"
@@ -8,6 +8,6 @@ repository = "https://github.com/scurvydoggo/bevy_stdin"
 keywords = ["bevy"]
 
 [dependencies]
-bevy = "0.17"
+bevy = "0.18"
 crossbeam-channel = "*"
 crossterm = "*"
